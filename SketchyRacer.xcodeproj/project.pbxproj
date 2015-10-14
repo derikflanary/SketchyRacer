@@ -19,7 +19,6 @@
 		EE8201BC1BCEE44B004D48C6 /* SketchyRacerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8201BB1BCEE44B004D48C6 /* SketchyRacerUITests.m */; };
 		EE8201CB1BCEE7EC004D48C6 /* CarSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8201CA1BCEE7EC004D48C6 /* CarSpriteNode.m */; settings = {ASSET_TAGS = (); }; };
 		EE8201CE1BCEEC87004D48C6 /* BackgroundSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8201CD1BCEEC87004D48C6 /* BackgroundSprite.m */; settings = {ASSET_TAGS = (); }; };
-		EE8201D11BCEF625004D48C6 /* Ground.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8201D01BCEF625004D48C6 /* Ground.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,8 +62,6 @@
 		EE8201CA1BCEE7EC004D48C6 /* CarSpriteNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarSpriteNode.m; sourceTree = "<group>"; };
 		EE8201CC1BCEEC87004D48C6 /* BackgroundSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundSprite.h; sourceTree = "<group>"; };
 		EE8201CD1BCEEC87004D48C6 /* BackgroundSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundSprite.m; sourceTree = "<group>"; };
-		EE8201CF1BCEF625004D48C6 /* Ground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ground.h; sourceTree = "<group>"; };
-		EE8201D01BCEF625004D48C6 /* Ground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ground.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,8 +120,6 @@
 				EE8201CA1BCEE7EC004D48C6 /* CarSpriteNode.m */,
 				EE8201CC1BCEEC87004D48C6 /* BackgroundSprite.h */,
 				EE8201CD1BCEEC87004D48C6 /* BackgroundSprite.m */,
-				EE8201CF1BCEF625004D48C6 /* Ground.h */,
-				EE8201D01BCEF625004D48C6 /* Ground.m */,
 				EE82019A1BCEE44B004D48C6 /* GameScene.sks */,
 				EE82019C1BCEE44B004D48C6 /* GameViewController.h */,
 				EE82019D1BCEE44B004D48C6 /* GameViewController.m */,
@@ -300,7 +295,6 @@
 				EE8201991BCEE44B004D48C6 /* GameScene.m in Sources */,
 				EE8201CE1BCEEC87004D48C6 /* BackgroundSprite.m in Sources */,
 				EE8201931BCEE44B004D48C6 /* main.m in Sources */,
-				EE8201D11BCEF625004D48C6 /* Ground.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

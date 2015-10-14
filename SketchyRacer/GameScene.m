@@ -9,12 +9,12 @@
 #import "GameScene.h"
 #import "CarSpriteNode.h"
 #import "BackgroundSprite.h"
-#import "Ground.h"
 
 @interface GameScene () <SKPhysicsContactDelegate>
 
 @property (nonatomic, strong) CarSpriteNode *carSprite;
-@property (nonatomic, strong) Ground *ground;
+@property CGMutablePathRef pathToDraw;
+@property (nonatomic) SKShapeNode* selectorLine;
 
 @end
 
@@ -30,8 +30,6 @@ static const uint32_t groundCategory        =  0x1 << 1;
         
         //create Physics for collisions
         self.physicsWorld.contactDelegate = self;
-//        self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
-        
 
     }
     return self;
@@ -46,21 +44,16 @@ static const uint32_t groundCategory        =  0x1 << 1;
     
     if (!self.carSprite) {
         self.carSprite = [CarSpriteNode spriteNodeWithImageNamed:@"Car1"];
-        self.carSprite.position = CGPointMake(100, 400);
+        self.carSprite.position = CGPointMake(100, 600);
         self.carSprite.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.carSprite.size];
         self.carSprite.physicsBody.dynamic = YES;
         self.carSprite.physicsBody.affectedByGravity = YES;
         self.carSprite.physicsBody.categoryBitMask = carCategory;
         self.carSprite.physicsBody.collisionBitMask = groundCategory;
+        self.carSprite.physicsBody.usesPreciseCollisionDetection = YES;
+        self.carSprite.physicsBody.mass = 1000;
         self.carSprite.name = @"car";
-        
-        SKAction *action = [SKAction rotateByAngle:M_PI duration:1];
         [self addChild:self.carSprite];
-        
-        self.ground = [Ground spriteNodeWithColor:[UIColor clearColor] size:CGSizeMake(5, 5)];
-        self.ground.name = @"ground";
-        [self addChild:self.ground];
-
         
     }
 
@@ -71,50 +64,36 @@ static const uint32_t groundCategory        =  0x1 << 1;
     
     CGPoint touchPoint = [[touches anyObject] locationInNode:self.scene];
     
-    [self.ground addPointToMove:touchPoint];
+    self.pathToDraw = CGPathCreateMutable();
+    CGPathMoveToPoint(self.pathToDraw, NULL, touchPoint.x, touchPoint.y);
     
-
+    self.selectorLine = [SKShapeNode shapeNodeWithPath:self.pathToDraw];
+    [self addChild:self.selectorLine];
+    self.selectorLine.strokeColor = [SKColor darkGrayColor];
+    self.selectorLine.lineWidth = 10;
+    
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     CGPoint touchPoint = [[touches anyObject] locationInNode:self.scene];
     
-    if (self.ground) {
-        [self.ground addPointToMove:touchPoint];
-        
-    }
+    CGPathAddLineToPoint(self.pathToDraw, NULL, touchPoint.x, touchPoint.y);
+    self.selectorLine.path = self.pathToDraw;
+    self.selectorLine.physicsBody = [SKPhysicsBody bodyWithPolygonFromPath:self.pathToDraw];
+    self.selectorLine.physicsBody.restitution = 0.01f;
+    self.selectorLine.physicsBody.dynamic = NO;
+    self.selectorLine.physicsBody.usesPreciseCollisionDetection = YES;
+    self.selectorLine.physicsBody.categoryBitMask = groundCategory;
+    self.selectorLine.physicsBody.collisionBitMask = carCategory;
+    self.selectorLine.physicsBody.mass = 100;
+    self.selectorLine.zPosition = 1;
+    
 }
 
-- (void)drawLines {
-    //1
-    NSMutableArray *temp = [NSMutableArray array];
-    for(CALayer *layer in self.view.layer.sublayers) {
-        if([layer.name isEqualToString:@"line"]) {
-            [temp addObject:layer];
-        }
-    }
-    [temp makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
-    
-    //2
-    [self enumerateChildNodesWithName:@"ground" usingBlock:^(SKNode *node, BOOL *stop) {
-        //3
-        CAShapeLayer *lineLayer = [CAShapeLayer layer];
-        lineLayer.name = @"line";
-        lineLayer.strokeColor = [UIColor grayColor].CGColor;
-        lineLayer.fillColor = nil;
-        
-        //4
-        CGPathRef path = [(Ground *)node createPathToMove];
-        lineLayer.path = path;
-        CGPathRelease(path);
-        [self.view.layer addSublayer:lineLayer];
-        
-    }];
-}
 
 -(void)update:(CFTimeInterval)currentTime {
     /* Called before each frame is rendered */
-    [self drawLines];
+
 }
 
 - (void)didBeginContact:(SKPhysicsContact *)contact
