@@ -522,6 +522,7 @@
 				EE8201C21BCEE44B004D48C6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EE8201C31BCEE44B004D48C6 /* Build configuration list for PBXNativeTarget "SketchyRacerTests" */ = {
 			isa = XCConfigurationList;
@@ -530,6 +531,7 @@
 				EE8201C51BCEE44B004D48C6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EE8201C61BCEE44B004D48C6 /* Build configuration list for PBXNativeTarget "SketchyRacerUITests" */ = {
 			isa = XCConfigurationList;
@@ -538,6 +540,7 @@
 				EE8201C81BCEE44B004D48C6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
