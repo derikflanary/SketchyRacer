@@ -13,8 +13,10 @@
 @interface GameScene () <SKPhysicsContactDelegate>
 
 @property (nonatomic, strong) CarSpriteNode *carSprite;
+@property (nonatomic, strong) BackgroundSprite *background;
 @property CGMutablePathRef pathToDraw;
 @property (nonatomic) SKShapeNode* selectorLine;
+@property (nonatomic, assign) NSTimeInterval previousUpdateTime;
 
 @end
 
@@ -27,6 +29,8 @@ static const uint32_t groundCategory        =  0x1 << 1;
     if (self = [super initWithSize:size]) {
         self.backgroundColor = [SKColor blueColor];
         self.scaleMode = SKSceneScaleModeAspectFit;
+//        self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
+        self.physicsBody = [SKPhysicsBody bodyWithEdgeFromPoint:CGPointMake(0, 10) toPoint:CGPointMake(10000, 10)];
         
         //create Physics for collisions
         self.physicsWorld.contactDelegate = self;
@@ -37,23 +41,24 @@ static const uint32_t groundCategory        =  0x1 << 1;
 
 -(void)didMoveToView:(SKView *)view {
     /* Setup your scene here */
-    BackgroundSprite *background = [BackgroundSprite spriteNodeWithImageNamed:@"LinedPaper"];
-    background.size = self.frame.size;
-    background.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
-    [self addChild:background];
+    self.background = [BackgroundSprite spriteNodeWithImageNamed:@"LinedPaper"];
+    self.background.size = self.frame.size;
+    self.background.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
+    [self addChild:self.background];
     
     if (!self.carSprite) {
         self.carSprite = [CarSpriteNode spriteNodeWithImageNamed:@"Car1"];
-        self.carSprite.position = CGPointMake(100, 600);
+        self.carSprite.position = CGPointMake(100, 100);
         self.carSprite.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.carSprite.size];
         self.carSprite.physicsBody.dynamic = YES;
         self.carSprite.physicsBody.affectedByGravity = YES;
         self.carSprite.physicsBody.categoryBitMask = carCategory;
         self.carSprite.physicsBody.collisionBitMask = groundCategory;
         self.carSprite.physicsBody.usesPreciseCollisionDetection = YES;
-        self.carSprite.physicsBody.mass = 1000;
+        self.carSprite.physicsBody.mass = .02;
         self.carSprite.name = @"car";
         [self addChild:self.carSprite];
+        
         
     }
 
@@ -61,6 +66,7 @@ static const uint32_t groundCategory        =  0x1 << 1;
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
+    
     
     CGPoint touchPoint = [[touches anyObject] locationInNode:self.scene];
     
@@ -80,7 +86,7 @@ static const uint32_t groundCategory        =  0x1 << 1;
     CGPathAddLineToPoint(self.pathToDraw, NULL, touchPoint.x, touchPoint.y);
     self.selectorLine.path = self.pathToDraw;
     self.selectorLine.physicsBody = [SKPhysicsBody bodyWithPolygonFromPath:self.pathToDraw];
-    self.selectorLine.physicsBody.restitution = 0.01f;
+    self.selectorLine.physicsBody.restitution = 0.00f;
     self.selectorLine.physicsBody.dynamic = NO;
     self.selectorLine.physicsBody.usesPreciseCollisionDetection = YES;
     self.selectorLine.physicsBody.categoryBitMask = groundCategory;
@@ -94,6 +100,26 @@ static const uint32_t groundCategory        =  0x1 << 1;
 -(void)update:(CFTimeInterval)currentTime {
     /* Called before each frame is rendered */
 
+    NSTimeInterval delta = currentTime - self.previousUpdateTime;
+    //3
+    if (delta > 0.02) {
+        delta = 0.02;
+    }
+    //4
+    self.previousUpdateTime = currentTime;
+    
+    float rotation = self.carSprite.zRotation;
+    CGFloat r = .5;
+    
+    // Create a vector in the direction the sprite is facing
+    CGFloat dx = r * cos (rotation);
+    CGFloat dy = r * sin (rotation);
+    
+    // Apply impulse to physics body
+    [self.carSprite.physicsBody applyImpulse:CGVectorMake(dx,dy)];
+    
+//    [self.carSprite.physicsBody applyForce:CGVectorMake(10, 0)];
+    NSLog(@"%f, %f", dx, dy);
 }
 
 - (void)didBeginContact:(SKPhysicsContact *)contact

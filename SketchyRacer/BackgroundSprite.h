@@ -10,4 +10,6 @@
 
 @interface BackgroundSprite : SKSpriteNode
 
+- (void)move;
+
 @end

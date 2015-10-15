@@ -10,6 +10,12 @@
 
 @implementation BackgroundSprite
 
-static const int POINTS_PER_SEC = 20;
+static const int POINTS_PER_SEC = 1;
 
+- (void)move{
+    self.position = CGPointMake(self.position.x - POINTS_PER_SEC, self.position.y);
+//    for (SKShapeNode *line in self.children) {
+//        line.position = CGPointMake(line.position.x - POINTS_PER_SEC, line.position.y);
+//    }
+}
 @end

@@ -10,4 +10,9 @@
 
 @implementation CarSpriteNode
 
+
+- (void)accelerate{
+    
+}
+
 @end
